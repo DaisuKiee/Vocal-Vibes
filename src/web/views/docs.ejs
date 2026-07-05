@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include('partials/head') %>
+</head>
+<body>
+    <%- include('partials/preloader') %>
+    <%- include('partials/navbar') %>
+
+    <!-- Docs Layout -->
+    <div class="docs-layout">
+        <!-- Sidebar -->
+        <aside class="docs-sidebar" id="docsSidebar">
+            <div class="sidebar-header">
+                <h3><i class="fas fa-book"></i> Documentation</h3>
+                <button class="sidebar-close" id="sidebarClose"><i class="fas fa-times"></i></button>
+            </div>
+            <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <span class="nav-section-title">Getting Started</span>
+                    <a href="#introduction" class="nav-item active">Introduction</a>
+                    <a href="#quick-start" class="nav-item">Quick Start</a>
+                    <a href="#installation" class="nav-item">Installation</a>
+                </div>
+                <div class="nav-section">
+                    <span class="nav-section-title">Karaoke System</span>
+                    <a href="#starting-session" class="nav-item">Starting a Session</a>
+                    <a href="#queue-management" class="nav-item">Queue Management</a>
+                    <a href="#song-catalog" class="nav-item">Song Catalog</a>
+                    <a href="#auto-mute" class="nav-item">Auto-Mute System</a>
+                </div>
+                <div class="nav-section">
+                    <span class="nav-section-title">Configuration</span>
+                    <a href="#setup-wizard" class="nav-item">Setup Wizard</a>
+                    <a href="#sticky-messages" class="nav-item">Sticky Messages</a>
+                    <a href="#event-manager" class="nav-item">Event Manager Role</a>
+                    <a href="#permissions" class="nav-item">Permissions</a>
+                </div>
+                <div class="nav-section">
+                    <span class="nav-section-title">Commands</span>
+                    <a href="#karaoke-commands" class="nav-item">Karaoke Commands</a>
+                    <a href="#queue-commands" class="nav-item">Queue Commands</a>
+                    <a href="#utility-commands" class="nav-item">Utility Commands</a>
+                </div>
+                <div class="nav-section">
+                    <span class="nav-section-title">Troubleshooting</span>
+                    <a href="#common-issues" class="nav-item">Common Issues</a>
+                    <a href="#faq" class="nav-item">FAQ</a>
+                </div>
+            </nav>
+        </aside>
+
+        <!-- Mobile Sidebar Toggle -->
+        <button class="docs-menu-toggle" id="docsMenuToggle">
+            <i class="fas fa-bars"></i> Menu
+        </button>
+
+        <!-- Main Content -->
+        <main class="docs-content">
+            <!-- Introduction -->
+            <section id="introduction" class="docs-section">
+                <div class="section-header">
+                    <span class="section-badge">Getting Started</span>
+                    <h1>Introduction</h1>
+                </div>
+                <p class="lead">Welcome to Vocal Vibes, the ultimate Discord karaoke bot! This documentation will help you get started and make the most of all features.</p>
+                
+                <div class="feature-highlights">
+                    <div class="highlight-card">
+                        <i class="fas fa-list-ol"></i>
+                        <h4>Smart Queue</h4>
+                        <p>Intelligent queue management with position tracking</p>
+                    </div>
+                    <div class="highlight-card">
+                        <i class="fas fa-volume-mute"></i>
+                        <h4>Auto-Mute</h4>
+                        <p>Automatic audience muting during performances</p>
+                    </div>
+                    <div class="highlight-card">
+                        <i class="fas fa-music"></i>
+                        <h4>300+ Songs</h4>
+                        <p>Browse and search hundreds of popular songs</p>
+                    </div>
+                    <div class="highlight-card">
+                        <i class="fas fa-crown"></i>
+                        <h4>Event Manager</h4>
+                        <p>Dedicated role for session control</p>
+                    </div>
+                    <div class="highlight-card">
+                        <i class="fas fa-thumbtack"></i>
+                        <h4>Sticky Messages</h4>
+                        <p>Queue stays visible with sticky or delay modes</p>
+                    </div>
+                    <div class="highlight-card">
+                        <i class="fas fa-search"></i>
+                        <h4>Modal Search</h4>
+                        <p>Search songs by number, title, or artist</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Quick Start -->
+            <section id="quick-start" class="docs-section">
+                <div class="section-header">
+                    <span class="section-badge">Getting Started</span>
+                    <h1>Quick Start</h1>
+                </div>
+                <p>Get your karaoke session running in just 3 simple steps:</p>
+                
+                <div class="steps-container">
+                    <div class="step-card">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <h4>Invite the Bot</h4>
+                            <p>Click the invite button to add Vocal Vibes to your server with the required permissions.</p>
+                            <a href="<%= bot.inviteUrl %>" class="btn btn-sm" target="_blank"><i class="fas fa-plus"></i> Invite Bot</a>
+                        </div>
+                    </div>
+                    <div class="step-card">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <h4>Run Setup</h4>
+                            <p>Use the setup command to configure the Event Manager role and karaoke settings.</p>
+                            <div class="code-inline">/setup</div>
+                        </div>
+                    </div>
+                    <div class="step-card">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <h4>Start Singing!</h4>
+                            <p>Join a voice channel and start your first karaoke session.</p>
+                            <div class="code-inline">/karaoke start</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Installation -->
+            <section id="installation" class="docs-section">
+                <div class="section-header">
+                    <span class="section-badge">Getting Started</span>
+                    <h1>Installation</h1>
+                </div>
+                
+                <h3>Required Permissions</h3>
+                <p>Vocal Vibes needs the following permissions to function properly:</p>
+                
+                <div class="permissions-grid">
+                    <div class="permission-item">
+                        <i class="fas fa-check"></i>
+                        <span>Send Messages</span>
+                    </div>
+                    <div class="permission-item">
+                        <i class="fas fa-check"></i>
+                        <span>Embed Links</span>
+                    </div>
+                    <div class="permission-item">
+                        <i class="fas fa-check"></i>
+                        <span>Connect to Voice</span>
+                    </div>
+                    <div class="permission-item">
+                        <i class="fas fa-check"></i>
+                        <span>Speak in Voice</span>
+                    </div>
+                    <div class="permission-item">
+                        <i class="fas fa-check"></i>
+                        <span>Mute Members</span>
+                    </div>
+                    <div class="permission-item">
+                        <i class="fas fa-check"></i>
+                        <span>Manage Roles</span>
+                    </div>
+                </div>
+
+                <div class="callout callout-warning">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <div>
+                        <strong>Important:</strong> Make sure the bot's role is higher than the Event Manager role in your server's role hierarchy for muting to work properly.
+                    </div>
+                </div>
+            </section>
+
+            <!-- Starting a Session -->
+            <section id="starting-session" class="docs-section">
+                <div class="section-header">
+                    <span class="section-badge">Karaoke System</span>
+                    <h1>Starting a Session</h1>
+                </div>
+                
+                <p>Only users with the <strong>Event Manager</strong> role can start karaoke sessions.</p>
+
+                <h3>Start Command</h3>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span>Command</span>
+                        <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i></button>
+                    </div>
+                    <code>/karaoke start</code>
+                </div>
+
+                <h3>What Happens</h3>
+                <ol class="styled-list">
+                    <li>Bot joins your current voice channel</li>
+                    <li>Session is created and queue opens</li>
+                    <li>Audience members are automatically muted</li>
+                    <li>Queue interface is displayed in chat</li>
+                </ol>
+
+                <h3>Stopping a Session</h3>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span>Command</span>
+                        <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i></button>
+                    </div>
+                    <code>/karaoke stop</code>
+                </div>
+                <p>This will end the session, unmute all members, and the bot will leave the voice channel.</p>
+            </section>
+
+            <!-- Queue Management -->
+            <section id="queue-management" class="docs-section">
+                <div class="section-header">
+                    <span class="section-badge">Karaoke System</span>
+                    <h1>Queue Management</h1>
+                </div>
+
+                <h3>Viewing the Queue</h3>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span>Command</span>
+                        <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i></button>
+                    </div>
+                    <code>/queue</code>
+                </div>
+
+                <h3>Queue Buttons</h3>
+                <div class="table-container">
+                    <table class="docs-table">
+                        <thead>
+                            <tr>
+                                <th>Button</th>
+                                <th>Description</th>
+                                <th>Access</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><span class="badge badge-primary">Join Queue</span></td>
+                                <td>Opens a modal to search and select a song</td>
+                                <td>Everyone</td>
+                            </tr>
+                            <tr>
+                                <td><span class="badge badge-secondary">Browse Songs</span></td>
+                                <td>View songbook (private/ephemeral view)</td>
+                                <td>Everyone</td>
+                            </tr>
+                            <tr>
+                                <td><span class="badge badge-secondary">Full Queue</span></td>
+                                <td>View all queued participants</td>
+                                <td>Everyone (10s cooldown)</td>
+                            </tr>
+                            <tr>
+                                <td><span class="badge badge-accent">Next</span></td>
+                                <td>Skip to next singer</td>
+                                <td>Event Manager only</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="callout callout-info">
+                    <i class="fas fa-info-circle"></i>
+                    <div>
+                        <strong>Note:</strong> Users can only join the queue once. They must wait until their turn is complete before rejoining.
+                    </div>
+                </div>
+            </section>
+
+            <!-- Song Catalog -->
+            <section id="song-catalog" class="docs-section">
+                <div class="section-header">
+                    <span class="section-badge">Karaoke System</span>
+                    <h1>Song Catalog</h1>
+                </div>
+
+                <h3>Browsing Songs</h3>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span>Command</span>
+                        <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i></button>
+                    </div>
+                    <code>/songs</code>
+                </div>
+
+                <h3>300+ Popular Songs</h3>
+                <p>The songbook comes pre-loaded with over 300 popular songs from various artists and genres. Songs are organized alphabetically for easy browsing.</p>
+
+                <h3>Song Selection Options</h3>
+                <ul class="styled-list">
+                    <li><strong>Browse by Letter:</strong> Click A-Z buttons to browse songs alphabetically</li>
+                    <li><strong>Search by Number:</strong> Type the song number (e.g., "42") in the search modal</li>
+                    <li><strong>Search by Title/Artist:</strong> Type song name or artist to find matches</li>
+                    <li><strong>Online Search:</strong> Search Deezer/iTunes for songs not in the catalog</li>
+                </ul>
+
+                <div class="callout callout-info">
+                    <i class="fas fa-info-circle"></i>
+                    <div>
+                        <strong>Tip:</strong> When browsing songs, the view is private (ephemeral) - only you can see it! This prevents chat spam.
+                    </div>
+                </div>
+
+                <h3>Seeding Songs (Developer Only)</h3>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span>Command</span>
+                        <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i></button>
+                    </div>
+                    <code>?seed-songs confirm</code>
+                </div>
+                <p>Fetches 300+ popular songs from online APIs and adds them to the catalog. This is a developer-only command.</p>
+            </section>
+
+            <!-- Auto-Mute System -->
+            <section id="auto-mute" class="docs-section">
+                <div class="section-header">
+                    <span class="section-badge">Karaoke System</span>
+                    <h1>Auto-Mute System</h1>
+                </div>
+
+                <p>Vocal Vibes automatically manages voice channel muting during karaoke sessions:</p>
+
+                <div class="info-cards">
+                    <div class="info-card">
+                        <div class="info-icon audience"><i class="fas fa-users"></i></div>
+                        <h4>Audience</h4>
+                        <p>Automatically muted when joining during a session</p>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-icon singer"><i class="fas fa-microphone"></i></div>
+                        <h4>Current Singer</h4>
+                        <p>Unmuted when it's their turn to perform</p>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-icon manager"><i class="fas fa-crown"></i></div>
+                        <h4>Event Managers</h4>
+                        <p>Never auto-muted, always have voice access</p>
+                    </div>
+                </div>
+
+                <h3>Manual Mute Commands</h3>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span>Mute a user</span>
+                        <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i></button>
+                    </div>
+                    <code>/mute user @username</code>
+                </div>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span>Mute all</span>
+                        <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i></button>
+                    </div>
+                    <code>/mute all</code>
+                </div>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span>Unmute all</span>
+                        <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i></button>
+                    </div>
+                    <code>/mute unmute-all</code>
+                </div>
+            </section>
+
+            <!-- Setup Wizard -->
+            <section id="setup-wizard" class="docs-section">
+                <div class="section-header">
+                    <span class="section-badge">Configuration</span>
+                    <h1>Setup Wizard</h1>
+                </div>
+
+                <p>The setup wizard guides you through configuring Vocal Vibes for your server.</p>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span>Command</span>
+                        <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i></button>
+                    </div>
+                    <code>/karaoke-setup wizard</code>
+                </div>
+
+                <h3>Configuration Steps</h3>
+                <ol class="styled-list">
+                    <li><strong>Text Channel:</strong> Select the channel for karaoke messages and queue</li>
+                    <li><strong>Voice Channel:</strong> Choose the voice channel for singing</li>
+                    <li><strong>Event Manager Role:</strong> Select the role that can control sessions</li>
+                    <li><strong>Sticky Messages:</strong> Configure how the queue message stays visible</li>
+                </ol>
+
+                <h3>View Current Settings</h3>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span>Command</span>
+                        <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i></button>
+                    </div>
+                    <code>/karaoke-setup view</code>
+                </div>
+                <p>View and modify your current karaoke configuration with interactive buttons.</p>
+            </section>
+
+            <!-- Sticky Messages -->
+            <section id="sticky-messages" class="docs-section">
+                <div class="section-header">
+                    <span class="section-badge">Configuration</span>
+                    <h1>Sticky Messages</h1>
+                </div>
+
+                <p>Sticky messages keep the karaoke queue visible in the chat, even when other messages are sent.</p>
+
+                <h3>Sticky Modes</h3>
+                <div class="info-cards">
+                    <div class="info-card">
+                        <div class="info-icon singer"><i class="fas fa-thumbtack"></i></div>
+                        <h4>Sticky Mode</h4>
+                        <p>Queue message is immediately resent after any chat message, keeping it always at the bottom.</p>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-icon audience"><i class="fas fa-clock"></i></div>
+                        <h4>Delay Mode</h4>
+                        <p>Queue message is resent after X seconds of inactivity (5-300 seconds configurable).</p>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-icon manager"><i class="fas fa-times"></i></div>
+                        <h4>Disabled</h4>
+                        <p>Queue message stays where it was posted and doesn't auto-resend.</p>
+                    </div>
+                </div>
+
+                <h3>Configuring Sticky Messages</h3>
+                <p>You can configure sticky messages during the setup wizard or from the settings view:</p>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span>Command</span>
+                        <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i></button>
+                    </div>
+                    <code>/karaoke-setup view</code>
+                </div>
+                <p>Use the buttons to toggle sticky on/off, switch between modes, and set the delay time.</p>
+
+                <div class="callout callout-info">
+                    <i class="fas fa-info-circle"></i>
+                    <div>
+                        <strong>Recommended:</strong> Use Delay Mode with 30 seconds for a good balance between visibility and chat flow.
+                    </div>
+                </div>
+            </section>
+
+            <!-- Event Manager Role -->
+            <section id="event-manager" class="docs-section">
+                <div class="section-header">
+                    <span class="section-badge">Configuration</span>
+                    <h1>Event Manager Role</h1>
+                </div>
+
+                <p>The Event Manager role grants special permissions for controlling karaoke sessions.</p>
+
+                <h3>Event Manager Abilities</h3>
+                <ul class="styled-list">
+                    <li>Start and stop karaoke sessions</li>
+                    <li>Skip to the next singer</li>
+                    <li>Lock/unlock the queue</li>
+                    <li>Kick users from the queue</li>
+                    <li>Clear the entire queue</li>
+                    <li>Mute/unmute participants</li>
+                    <li>Manage the song catalog</li>
+                    <li>Never get auto-muted</li>
+                </ul>
+
+                <div class="callout callout-success">
+                    <i class="fas fa-lightbulb"></i>
+                    <div>
+                        <strong>Tip:</strong> Create a dedicated "Karaoke Host" or "DJ" role and assign it to trusted members who will run your karaoke events.
+                    </div>
+                </div>
+            </section>
+
+            <!-- Permissions -->
+            <section id="permissions" class="docs-section">
+                <div class="section-header">
+                    <span class="section-badge">Configuration</span>
+                    <h1>Permissions</h1>
+                </div>
+
+                <h3>Command Access Levels</h3>
+                <div class="table-container">
+                    <table class="docs-table">
+                        <thead>
+                            <tr>
+                                <th>Command</th>
+                                <th>Required Role</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>/karaoke start</code></td>
+                                <td>Event Manager</td>
+                            </tr>
+                            <tr>
+                                <td><code>/karaoke stop</code></td>
+                                <td>Event Manager</td>
+                            </tr>
+                            <tr>
+                                <td><code>/karaoke status</code></td>
+                                <td>Event Manager</td>
+                            </tr>
+                            <tr>
+                                <td><code>/queue skip</code></td>
+                                <td>Event Manager</td>
+                            </tr>
+                            <tr>
+                                <td><code>/queue kick</code></td>
+                                <td>Event Manager</td>
+                            </tr>
+                            <tr>
+                                <td><code>/queue lock</code></td>
+                                <td>Event Manager</td>
+                            </tr>
+                            <tr>
+                                <td><code>/queue clear</code></td>
+                                <td>Event Manager</td>
+                            </tr>
+                            <tr>
+                                <td><code>/mute</code></td>
+                                <td>Event Manager</td>
+                            </tr>
+                            <tr>
+                                <td><code>/queue view</code></td>
+                                <td>Everyone</td>
+                            </tr>
+                            <tr>
+                                <td><code>/queue add</code></td>
+                                <td>Everyone</td>
+                            </tr>
+                            <tr>
+                                <td><code>/queue remove</code></td>
+                                <td>Everyone</td>
+                            </tr>
+                            <tr>
+                                <td><code>/songs</code></td>
+                                <td>Everyone</td>
+                            </tr>
+                            <tr>
+                                <td><code>/karaoke-setup</code></td>
+                                <td>Manage Server</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Karaoke Commands -->
+            <section id="karaoke-commands" class="docs-section">
+                <div class="section-header">
+                    <span class="section-badge">Commands</span>
+                    <h1>Karaoke Commands</h1>
+                </div>
+
+                <div class="command-docs">
+                    <div class="command-doc">
+                        <h4>/karaoke start</h4>
+                        <p>Start a new karaoke session in your current voice channel.</p>
+                        <span class="command-tag">Event Manager</span>
+                    </div>
+                    <div class="command-doc">
+                        <h4>/karaoke stop</h4>
+                        <p>End the current karaoke session and unmute all members.</p>
+                        <span class="command-tag">Event Manager</span>
+                    </div>
+                    <div class="command-doc">
+                        <h4>/karaoke status</h4>
+                        <p>Check the current session status and queue information.</p>
+                        <span class="command-tag">Event Manager</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Queue Commands -->
+            <section id="queue-commands" class="docs-section">
+                <div class="section-header">
+                    <span class="section-badge">Commands</span>
+                    <h1>Queue Commands</h1>
+                </div>
+
+                <div class="command-docs">
+                    <div class="command-doc">
+                        <h4>/queue view</h4>
+                        <p>View the current queue and access queue controls.</p>
+                        <span class="command-tag">Everyone</span>
+                    </div>
+                    <div class="command-doc">
+                        <h4>/queue add &lt;song&gt;</h4>
+                        <p>Join the queue with a song (opens song selection modal).</p>
+                        <span class="command-tag">Everyone</span>
+                    </div>
+                    <div class="command-doc">
+                        <h4>/queue remove</h4>
+                        <p>Remove yourself from the queue.</p>
+                        <span class="command-tag">Everyone</span>
+                    </div>
+                    <div class="command-doc">
+                        <h4>/queue skip</h4>
+                        <p>Skip to the next singer in the queue.</p>
+                        <span class="command-tag">Event Manager</span>
+                    </div>
+                    <div class="command-doc">
+                        <h4>/queue kick @user</h4>
+                        <p>Remove a specific user from the queue.</p>
+                        <span class="command-tag">Event Manager</span>
+                    </div>
+                    <div class="command-doc">
+                        <h4>/queue lock</h4>
+                        <p>Lock or unlock the queue. When locked, no one can join the queue.</p>
+                        <span class="command-tag">Event Manager</span>
+                    </div>
+                    <div class="command-doc">
+                        <h4>/queue clear</h4>
+                        <p>Clear the entire queue, removing all entries.</p>
+                        <span class="command-tag">Event Manager</span>
+                    </div>
+                    <div class="command-doc">
+                        <h4>/songs</h4>
+                        <p>Browse the song catalog with 300+ songs, search by number/title/artist.</p>
+                        <span class="command-tag">Everyone</span>
+                    </div>
+                </div>
+
+                <h3>Queue Lock Feature</h3>
+                <p>Event Managers can lock the queue to prevent new entries during specific times:</p>
+                <ul class="styled-list">
+                    <li>When locked, the "Join Queue" button is disabled</li>
+                    <li>A 🔒 icon appears in the queue title</li>
+                    <li>Users see "Queue is LOCKED" message</li>
+                    <li>Use <code>/queue lock</code> again to unlock</li>
+                </ul>
+
+                <div class="callout callout-info">
+                    <i class="fas fa-info-circle"></i>
+                    <div>
+                        <strong>Tip:</strong> Lock the queue when you want to finish the current singers without new entries, or during breaks.
+                    </div>
+                </div>
+            </section>
+
+            <!-- Utility Commands -->
+            <section id="utility-commands" class="docs-section">
+                <div class="section-header">
+                    <span class="section-badge">Commands</span>
+                    <h1>Utility Commands</h1>
+                </div>
+
+                <div class="command-docs">
+                    <div class="command-doc">
+                        <h4>/help</h4>
+                        <p>View all available commands and their descriptions.</p>
+                        <span class="command-tag">Everyone</span>
+                    </div>
+                    <div class="command-doc">
+                        <h4>/ping</h4>
+                        <p>Check the bot's latency and response time.</p>
+                        <span class="command-tag">Everyone</span>
+                    </div>
+                    <div class="command-doc">
+                        <h4>/stats</h4>
+                        <p>View bot statistics and server information.</p>
+                        <span class="command-tag">Everyone</span>
+                    </div>
+                    <div class="command-doc">
+                        <h4>/invite</h4>
+                        <p>Get the bot's invite link.</p>
+                        <span class="command-tag">Everyone</span>
+                    </div>
+                    <div class="command-doc">
+                        <h4>/support</h4>
+                        <p>Get the support server invite link.</p>
+                        <span class="command-tag">Everyone</span>
+                    </div>
+                    <div class="command-doc">
+                        <h4>/sponsor</h4>
+                        <p>View sponsor information and support the bot.</p>
+                        <span class="command-tag">Everyone</span>
+                    </div>
+                </div>
+
+                <h3>Prefix Commands</h3>
+                <p>Most commands also work with the <code>?</code> prefix:</p>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span>Examples</span>
+                        <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i></button>
+                    </div>
+                    <code>?help, ?ping, ?karaoke start, ?queue</code>
+                </div>
+            </section>
+
+            <!-- Common Issues -->
+            <section id="common-issues" class="docs-section">
+                <div class="section-header">
+                    <span class="section-badge">Troubleshooting</span>
+                    <h1>Common Issues</h1>
+                </div>
+
+                <div class="accordion">
+                    <div class="accordion-item">
+                        <button class="accordion-header">
+                            <span>Bot won't mute members</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="accordion-content">
+                            <p>Make sure the bot's role is higher than the members you're trying to mute in the role hierarchy. The bot also needs the "Mute Members" permission.</p>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <button class="accordion-header">
+                            <span>Bot won't join voice channel</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="accordion-content">
+                            <p>Ensure the bot has "Connect" and "Speak" permissions for the voice channel. Also check if the channel has a user limit that's been reached.</p>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <button class="accordion-header">
+                            <span>Commands not showing up</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="accordion-content">
+                            <p>Try kicking and re-inviting the bot. Slash commands can take up to an hour to register globally. Make sure the bot has the "applications.commands" scope.</p>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <button class="accordion-header">
+                            <span>"Not configured" error</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="accordion-content">
+                            <p>Run <code>/setup</code> to configure the bot for your server. You need the "Manage Server" permission to do this.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- FAQ -->
+            <section id="faq" class="docs-section">
+                <div class="section-header">
+                    <span class="section-badge">Troubleshooting</span>
+                    <h1>FAQ</h1>
+                </div>
+
+                <div class="accordion">
+                    <div class="accordion-item">
+                        <button class="accordion-header">
+                            <span>Can I use the bot in multiple servers?</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="accordion-content">
+                            <p>Yes! Vocal Vibes can be added to multiple servers. Each server has its own configuration and queue.</p>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <button class="accordion-header">
+                            <span>Is there a limit to queue size?</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="accordion-content">
+                            <p>There's no hard limit on queue size. However, for the best experience, we recommend keeping sessions manageable.</p>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <button class="accordion-header">
+                            <span>Can I add custom songs?</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="accordion-content">
+                            <p>Yes! When joining the queue, you can enter any custom song title or search online for songs not in the catalog.</p>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <button class="accordion-header">
+                            <span>How do I report a bug?</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="accordion-content">
+                            <p>Visit our <a href="/report">Report Page</a> to submit bug reports, or join our <a href="<%= bot.supportServer %>" target="_blank">Support Server</a>.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Footer Navigation -->
+            <div class="docs-footer-nav">
+                <a href="<%= bot.supportServer %>" class="footer-nav-card" target="_blank">
+                    <i class="fab fa-discord"></i>
+                    <span>Need more help? Join our Support Server</span>
+                </a>
+            </div>
+        </main>
+    </div>
+
+    <%- include('partials/footer') %>
+
+    <script>
+        // Sidebar toggle for mobile
+        const sidebar = document.getElementById('docsSidebar');
+        const menuToggle = document.getElementById('docsMenuToggle');
+        const sidebarClose = document.getElementById('sidebarClose');
+
+        menuToggle.addEventListener('click', () => {
+            sidebar.classList.add('open');
+        });
+
+        sidebarClose.addEventListener('click', () => {
+            sidebar.classList.remove('open');
+        });
+
+        // Close sidebar when clicking a link on mobile
+        document.querySelectorAll('.sidebar-nav a').forEach(link => {
+            link.addEventListener('click', () => {
+                if (window.innerWidth <= 968) {
+                    sidebar.classList.remove('open');
+                }
+            });
+        });
+
+        // Active section highlighting
+        const sections = document.querySelectorAll('.docs-section');
+        const navItems = document.querySelectorAll('.nav-item');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop - 150;
+                if (window.scrollY >= sectionTop) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navItems.forEach(item => {
+                item.classList.remove('active');
+                if (item.getAttribute('href') === '#' + current) {
+                    item.classList.add('active');
+                }
+            });
+        });
+
+        // Accordion
+        document.querySelectorAll('.accordion-header').forEach(header => {
+            header.addEventListener('click', () => {
+                const item = header.parentElement;
+                const isOpen = item.classList.contains('open');
+                
+                // Close all
+                document.querySelectorAll('.accordion-item').forEach(i => i.classList.remove('open'));
+                
+                // Open clicked if it wasn't open
+                if (!isOpen) {
+                    item.classList.add('open');
+                }
+            });
+        });
+
+        // Copy code
+        function copyCode(btn) {
+            const code = btn.parentElement.nextElementSibling.textContent;
+            navigator.clipboard.writeText(code);
+            btn.innerHTML = '<i class="fas fa-check"></i>';
+            setTimeout(() => {
+                btn.innerHTML = '<i class="fas fa-copy"></i>';
+            }, 2000);
+        }
+    </script>
+</body>
+</html>

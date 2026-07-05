@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include('partials/head') %>
+</head>
+<body>
+    <%- include('partials/preloader') %>
+    <%- include('partials/navbar') %>
+
+    <!-- Hero Section -->
+    <section class="hero" id="hero">
+        <div class="hero-bg">
+            <div class="equalizer">
+                <span></span><span></span><span></span><span></span><span></span>
+                <span></span><span></span><span></span><span></span><span></span>
+                <span></span><span></span><span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <div class="badge animate-fade-in">
+                        <i class="fas fa-microphone-alt"></i> #1 Karaoke Bot
+                    </div>
+                    <h1 class="animate-slide-up">
+                        <span class="gradient-text">VOCAL</span>
+                        <span class="white-text">VIBES</span>
+                        <span class="music-icon">♪</span>
+                    </h1>
+                    <p class="hero-description animate-slide-up-delay">
+                        Transform your Discord server into the ultimate karaoke stage! 
+                        Queue management, auto-mute, song catalog, and unforgettable singing experiences.
+                    </p>
+                    <div class="hero-buttons animate-slide-up-delay-2">
+                        <a href="<%= bot.inviteUrl %>" class="btn btn-primary glow-effect" target="_blank">
+                            <i class="fas fa-robot"></i> Add to Server
+                        </a>
+                        <a href="<%= bot.supportServer %>" class="btn btn-secondary" target="_blank">
+                            <i class="fab fa-discord"></i> Join Community
+                        </a>
+                    </div>
+                </div>
+                <div class="hero-visual animate-float">
+                    <div class="avatar-container">
+                        <div class="avatar-ring"></div>
+                        <div class="avatar-ring ring-2"></div>
+                        <img src="<%= bot.avatar %>" alt="<%= bot.name %>" class="hero-avatar">
+                        <div class="status-indicator online"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="scroll-indicator">
+            <span>Scroll Down</span>
+            <i class="fas fa-chevron-down"></i>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats" id="stats">
+        <div class="container">
+            <div class="stats-header">
+                <h2 class="section-title">Live Statistics</h2>
+                <p class="section-subtitle">Real-time bot performance metrics</p>
+            </div>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-server"></i></div>
+                    <div class="stat-info">
+                        <span class="stat-number counter" data-target="<%= bot.servers %>"><%= bot.servers %></span>
+                        <span class="stat-label">Servers</span>
+                    </div>
+                    <div class="stat-glow"></div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-users"></i></div>
+                    <div class="stat-info">
+                        <span class="stat-number counter" data-target="<%= bot.users %>"><%= bot.users.toLocaleString() %></span>
+                        <span class="stat-label">Users</span>
+                    </div>
+                    <div class="stat-glow"></div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-terminal"></i></div>
+                    <div class="stat-info">
+                        <span class="stat-number"><%= bot.commands %></span>
+                        <span class="stat-label">Commands</span>
+                    </div>
+                    <div class="stat-glow"></div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-bolt"></i></div>
+                    <div class="stat-info">
+                        <span class="stat-number" id="ping"><%= bot.ping %>ms</span>
+                        <span class="stat-label">Latency</span>
+                    </div>
+                    <div class="stat-glow"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="container">
+            <div class="features-header">
+                <h2 class="section-title">Amazing Features</h2>
+                <p class="section-subtitle">Everything you need for the perfect karaoke night</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon-wrapper">
+                        <i class="fas fa-list-ol"></i>
+                    </div>
+                    <h3>Smart Queue</h3>
+                    <p>Intelligent queue management with position tracking, estimated wait times, and easy controls.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon-wrapper">
+                        <i class="fas fa-volume-mute"></i>
+                    </div>
+                    <h3>Auto-Mute</h3>
+                    <p>Automatically mutes audience and unmutes singers. No more interruptions during performances!</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon-wrapper">
+                        <i class="fas fa-music"></i>
+                    </div>
+                    <h3>Song Catalog</h3>
+                    <p>Browse hundreds of songs, search online, and build your perfect karaoke library.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon-wrapper">
+                        <i class="fas fa-crown"></i>
+                    </div>
+                    <h3>Event Manager</h3>
+                    <p>Dedicated role for hosts with full control over sessions, skips, and queue management.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon-wrapper">
+                        <i class="fas fa-headphones"></i>
+                    </div>
+                    <h3>Voice Integration</h3>
+                    <p>Seamless voice channel integration with automatic join, mute controls, and reconnection.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon-wrapper">
+                        <i class="fas fa-magic"></i>
+                    </div>
+                    <h3>Easy Setup</h3>
+                    <p>Interactive setup wizard gets you started in minutes. No coding required!</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta">
+        <div class="container">
+            <div class="cta-content">
+                <h2>Ready to Start Singing?</h2>
+                <p>Join thousands of servers already hosting amazing karaoke nights!</p>
+                <a href="<%= bot.inviteUrl %>" class="btn btn-primary btn-large glow-effect" target="_blank">
+                    <i class="fas fa-microphone-alt"></i> Get Started Now
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <%- include('partials/footer') %>
+</body>
+</html>

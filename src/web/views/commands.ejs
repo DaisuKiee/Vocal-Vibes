@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include('partials/head') %>
+</head>
+<body>
+    <%- include('partials/preloader') %>
+    <%- include('partials/navbar') %>
+
+    <!-- Commands Hero -->
+    <section class="page-hero">
+        <div class="container">
+            <h1 class="page-title"><i class="fas fa-terminal"></i> Commands</h1>
+            <p class="page-subtitle">All available bot commands</p>
+        </div>
+    </section>
+
+    <!-- Commands Content -->
+    <section class="commands-section">
+        <div class="container">
+            <!-- Category Filter -->
+            <div class="category-filter">
+                <button class="filter-btn active" data-category="all">All</button>
+                <% Object.keys(categories).forEach(cat => { %>
+                <button class="filter-btn" data-category="<%= cat %>"><%= cat.charAt(0).toUpperCase() + cat.slice(1) %></button>
+                <% }); %>
+            </div>
+
+            <!-- Commands Grid -->
+            <div class="commands-grid">
+                <% Object.entries(categories).forEach(([category, cmds]) => { %>
+                <div class="category-section" data-category="<%= category %>">
+                    <h2 class="category-title">
+                        <% if (category === 'karaoke') { %>
+                        <i class="fas fa-microphone-alt"></i>
+                        <% } else if (category === 'info') { %>
+                        <i class="fas fa-info-circle"></i>
+                        <% } else if (category === 'config') { %>
+                        <i class="fas fa-cog"></i>
+                        <% } else if (category === 'dev') { %>
+                        <i class="fas fa-code"></i>
+                        <% } else { %>
+                        <i class="fas fa-folder"></i>
+                        <% } %>
+                        <%= category.charAt(0).toUpperCase() + category.slice(1) %>
+                    </h2>
+                    <div class="commands-list">
+                        <% cmds.forEach(cmd => { %>
+                        <div class="command-card">
+                            <div class="command-header">
+                                <span class="command-name">/<%= cmd.name %></span>
+                                <span class="command-cooldown"><i class="fas fa-clock"></i> <%= cmd.cooldown %>s</span>
+                            </div>
+                            <p class="command-description"><%= cmd.description %></p>
+                            <div class="command-footer">
+                                <span class="command-usage"><code><%= cmd.usage %></code></span>
+                                <% if (cmd.aliases && cmd.aliases.length > 0) { %>
+                                <span class="command-aliases">
+                                    <% cmd.aliases.forEach((alias, i) => { %>
+                                    <span class="alias"><%= alias %></span>
+                                    <% }); %>
+                                </span>
+                                <% } %>
+                            </div>
+                        </div>
+                        <% }); %>
+                    </div>
+                </div>
+                <% }); %>
+            </div>
+        </div>
+    </section>
+
+    <%- include('partials/footer') %>
+
+    <script>
+        // Category filter
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                
+                const category = btn.dataset.category;
+                document.querySelectorAll('.category-section').forEach(section => {
+                    if (category === 'all' || section.dataset.category === category) {
+                        section.style.display = 'block';
+                    } else {
+                        section.style.display = 'none';
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

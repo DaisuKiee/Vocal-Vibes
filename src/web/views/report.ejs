@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include('partials/head') %>
+</head>
+<body>
+    <%- include('partials/preloader') %>
+    <%- include('partials/navbar') %>
+
+    <!-- Report Hero -->
+    <section class="page-hero">
+        <div class="container">
+            <h1 class="page-title"><i class="fas fa-bug"></i> Report an Issue</h1>
+            <p class="page-subtitle">Help us improve Vocal Vibes by reporting bugs or issues</p>
+        </div>
+    </section>
+
+    <!-- Report Form Section -->
+    <section class="report-section">
+        <div class="container">
+            <div class="report-container">
+                <!-- Info Card -->
+                <div class="report-info">
+                    <div class="info-card">
+                        <div class="info-icon"><i class="fas fa-info-circle"></i></div>
+                        <h3>Before Reporting</h3>
+                        <ul>
+                            <li>Check if the issue persists after restarting</li>
+                            <li>Make sure the bot has proper permissions</li>
+                            <li>Include as much detail as possible</li>
+                            <li>Describe steps to reproduce the issue</li>
+                        </ul>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-icon"><i class="fas fa-shield-alt"></i></div>
+                        <h3>Privacy Notice</h3>
+                        <p>Your Discord username and server info may be collected to help us investigate the issue. We don't share this data with third parties.</p>
+                    </div>
+                </div>
+
+                <!-- Report Form -->
+                <div class="report-form-container">
+                    <form id="reportForm" class="report-form">
+                        <div class="form-group">
+                            <label for="reportType">
+                                <i class="fas fa-tag"></i> Report Type
+                            </label>
+                            <select id="reportType" name="type" required>
+                                <option value="">Select a category...</option>
+                                <option value="bug">🐛 Bug Report</option>
+                                <option value="error">❌ Error Message</option>
+                                <option value="feature">💡 Feature Request</option>
+                                <option value="performance">⚡ Performance Issue</option>
+                                <option value="other">📝 Other</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="discordUsername">
+                                <i class="fab fa-discord"></i> Discord Username
+                            </label>
+                            <input type="text" id="discordUsername" name="username" placeholder="e.g. username#0000 or @username" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="serverName">
+                                <i class="fas fa-server"></i> Server Name (Optional)
+                            </label>
+                            <input type="text" id="serverName" name="server" placeholder="Where did this happen?">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="reportTitle">
+                                <i class="fas fa-heading"></i> Title
+                            </label>
+                            <input type="text" id="reportTitle" name="title" placeholder="Brief description of the issue" required maxlength="100">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="reportDescription">
+                                <i class="fas fa-align-left"></i> Description
+                            </label>
+                            <textarea id="reportDescription" name="description" placeholder="Please describe the issue in detail. Include:&#10;- What you were trying to do&#10;- What happened instead&#10;- Any error messages you saw&#10;- Steps to reproduce" required rows="6"></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="commandUsed">
+                                <i class="fas fa-terminal"></i> Command Used (Optional)
+                            </label>
+                            <input type="text" id="commandUsed" name="command" placeholder="e.g. /karaoke start">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="errorMessage">
+                                <i class="fas fa-exclamation-triangle"></i> Error Message (Optional)
+                            </label>
+                            <textarea id="errorMessage" name="error" placeholder="Paste any error messages here" rows="3"></textarea>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary" id="submitBtn">
+                                <i class="fas fa-paper-plane"></i> Submit Report
+                            </button>
+                            <button type="reset" class="btn btn-secondary">
+                                <i class="fas fa-redo"></i> Clear Form
+                            </button>
+                        </div>
+                    </form>
+
+                    <!-- Success Message -->
+                    <div id="successMessage" class="success-message" style="display: none;">
+                        <div class="success-icon"><i class="fas fa-check-circle"></i></div>
+                        <h3>Report Submitted!</h3>
+                        <p>Thank you for helping us improve Vocal Vibes. We'll look into this issue as soon as possible.</p>
+                        <button onclick="resetForm()" class="btn btn-primary">
+                            <i class="fas fa-plus"></i> Submit Another Report
+                        </button>
+                    </div>
+
+                    <!-- Error Message -->
+                    <div id="errorMessageBox" class="error-message" style="display: none;">
+                        <div class="error-icon"><i class="fas fa-times-circle"></i></div>
+                        <h3>Submission Failed</h3>
+                        <p id="errorText">Something went wrong. Please try again later.</p>
+                        <button onclick="hideError()" class="btn btn-secondary">
+                            <i class="fas fa-redo"></i> Try Again
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <%- include('partials/footer') %>
+
+    <script>
+        const form = document.getElementById('reportForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const successMessage = document.getElementById('successMessage');
+        const errorMessageBox = document.getElementById('errorMessageBox');
+        const errorText = document.getElementById('errorText');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
+
+            const formData = {
+                type: document.getElementById('reportType').value,
+                username: document.getElementById('discordUsername').value,
+                server: document.getElementById('serverName').value,
+                title: document.getElementById('reportTitle').value,
+                description: document.getElementById('reportDescription').value,
+                command: document.getElementById('commandUsed').value,
+                error: document.getElementById('errorMessage').value
+            };
+
+            try {
+                const res = await fetch('/api/report', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(formData)
+                });
+
+                const data = await res.json();
+
+                if (res.ok) {
+                    form.style.display = 'none';
+                    successMessage.style.display = 'block';
+                } else {
+                    errorText.textContent = data.error || 'Something went wrong. Please try again.';
+                    errorMessageBox.style.display = 'block';
+                }
+            } catch (err) {
+                errorText.textContent = 'Network error. Please check your connection.';
+                errorMessageBox.style.display = 'block';
+            }
+
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit Report';
+        });
+
+        function resetForm() {
+            form.reset();
+            form.style.display = 'block';
+            successMessage.style.display = 'none';
+        }
+
+        function hideError() {
+            errorMessageBox.style.display = 'none';
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include('partials/head') %>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <%- include('partials/preloader') %>
+    <%- include('partials/navbar') %>
+
+    <!-- Status Hero -->
+    <section class="page-hero">
+        <div class="container">
+            <h1 class="page-title"><i class="fas fa-signal"></i> Bot Status</h1>
+            <p class="page-subtitle">Real-time system status and statistics</p>
+        </div>
+    </section>
+
+    <!-- Status Overview -->
+    <section class="status-section">
+        <div class="container">
+            <!-- Main Status Card -->
+            <div class="status-main-card <%= status.online ? 'online' : 'offline' %>">
+                <div class="status-indicator-large">
+                    <span class="status-dot <%= status.online ? 'online' : 'offline' %>"></span>
+                    <span class="status-text"><%= status.online ? 'All Systems Operational' : 'System Offline' %></span>
+                </div>
+                <div class="status-uptime">
+                    <i class="fas fa-clock"></i>
+                    <span>Uptime: <%= status.uptime %></span>
+                </div>
+            </div>
+
+            <!-- Stats Grid -->
+            <div class="status-grid">
+                <div class="status-card">
+                    <div class="status-card-icon"><i class="fas fa-heartbeat"></i></div>
+                    <div class="status-card-info">
+                        <span class="status-card-value" id="ping"><%= status.ping %>ms</span>
+                        <span class="status-card-label">Latency</span>
+                    </div>
+                    <div class="status-card-bar">
+                        <div class="bar-fill <%= status.ping < 100 ? 'good' : status.ping < 200 ? 'medium' : 'bad' %>" style="width: <%= Math.min(status.ping / 3, 100) %>%"></div>
+                    </div>
+                </div>
+
+                <div class="status-card">
+                    <div class="status-card-icon"><i class="fas fa-server"></i></div>
+                    <div class="status-card-info">
+                        <span class="status-card-value" id="servers"><%= status.servers.toLocaleString() %></span>
+                        <span class="status-card-label">Servers</span>
+                    </div>
+                </div>
+
+                <div class="status-card">
+                    <div class="status-card-icon"><i class="fas fa-users"></i></div>
+                    <div class="status-card-info">
+                        <span class="status-card-value" id="users"><%= status.users.toLocaleString() %></span>
+                        <span class="status-card-label">Users</span>
+                    </div>
+                </div>
+
+                <div class="status-card">
+                    <div class="status-card-icon"><i class="fas fa-hashtag"></i></div>
+                    <div class="status-card-info">
+                        <span class="status-card-value" id="channels"><%= status.channels.toLocaleString() %></span>
+                        <span class="status-card-label">Channels</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Graphs Section -->
+            <div class="graphs-section">
+                <div class="graphs-grid">
+                    <!-- Ping Graph -->
+                    <div class="graph-card">
+                        <div class="graph-header">
+                            <h4><i class="fas fa-heartbeat"></i> Latency History</h4>
+                            <span class="graph-label">Last 30 readings</span>
+                        </div>
+                        <div class="graph-container">
+                            <canvas id="pingChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Memory Graph -->
+                    <div class="graph-card">
+                        <div class="graph-header">
+                            <h4><i class="fas fa-memory"></i> Memory Usage</h4>
+                            <span class="graph-label">Last 30 readings</span>
+                        </div>
+                        <div class="graph-container">
+                            <canvas id="memoryChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Server Stats Graph -->
+                <div class="graph-card full-width">
+                    <div class="graph-header">
+                        <h4><i class="fas fa-chart-area"></i> Bot Statistics Overview</h4>
+                        <span class="graph-label">Servers, Users, Channels</span>
+                    </div>
+                    <div class="graph-container large">
+                        <canvas id="statsChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- System Info -->
+            <div class="system-info">
+                <h3><i class="fas fa-microchip"></i> System Information</h3>
+                <div class="system-grid">
+                    <div class="system-item">
+                        <span class="system-label">Memory Usage</span>
+                        <span class="system-value" id="memory"><%= status.memoryUsage %> MB</span>
+                    </div>
+                    <div class="system-item">
+                        <span class="system-label">Node.js Version</span>
+                        <span class="system-value"><%= status.nodeVersion %></span>
+                    </div>
+                    <div class="system-item">
+                        <span class="system-label">Platform</span>
+                        <span class="system-value"><%= status.platform %></span>
+                    </div>
+                    <div class="system-item">
+                        <span class="system-label">CPU Load</span>
+                        <span class="system-value" id="cpu"><%= status.cpuUsage %>%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <%- include('partials/footer') %>
+
+    <script>
+        // Chart.js default config
+        Chart.defaults.color = '#b8b8d0';
+        Chart.defaults.borderColor = 'rgba(108, 92, 231, 0.2)';
+        
+        // Data storage
+        const maxDataPoints = 30;
+        const pingData = [<%= status.ping %>];
+        const memoryData = [<%= status.memoryUsage %>];
+        const timeLabels = [new Date().toLocaleTimeString()];
+        
+        // Gradient helper
+        function createGradient(ctx, color1, color2) {
+            const gradient = ctx.createLinearGradient(0, 0, 0, 300);
+            gradient.addColorStop(0, color1);
+            gradient.addColorStop(1, color2);
+            return gradient;
+        }
+
+        // Ping Chart
+        const pingCtx = document.getElementById('pingChart').getContext('2d');
+        const pingChart = new Chart(pingCtx, {
+            type: 'line',
+            data: {
+                labels: timeLabels,
+                datasets: [{
+                    label: 'Ping (ms)',
+                    data: pingData,
+                    borderColor: '#6c5ce7',
+                    backgroundColor: createGradient(pingCtx, 'rgba(108, 92, 231, 0.3)', 'rgba(108, 92, 231, 0)'),
+                    borderWidth: 3,
+                    fill: true,
+                    tension: 0.4,
+                    pointBackgroundColor: '#6c5ce7',
+                    pointBorderColor: '#fff',
+                    pointBorderWidth: 2,
+                    pointRadius: 4,
+                    pointHoverRadius: 6
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    x: {
+                        grid: { display: false },
+                        ticks: { maxTicksLimit: 6 }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        grid: { color: 'rgba(108, 92, 231, 0.1)' },
+                        ticks: { callback: v => v + 'ms' }
+                    }
+                },
+                interaction: { intersect: false, mode: 'index' }
+            }
+        });
+
+        // Memory Chart
+        const memoryCtx = document.getElementById('memoryChart').getContext('2d');
+        const memoryChart = new Chart(memoryCtx, {
+            type: 'line',
+            data: {
+                labels: timeLabels,
+                datasets: [{
+                    label: 'Memory (MB)',
+                    data: memoryData,
+                    borderColor: '#00cec9',
+                    backgroundColor: createGradient(memoryCtx, 'rgba(0, 206, 201, 0.3)', 'rgba(0, 206, 201, 0)'),
+                    borderWidth: 3,
+                    fill: true,
+                    tension: 0.4,
+                    pointBackgroundColor: '#00cec9',
+                    pointBorderColor: '#fff',
+                    pointBorderWidth: 2,
+                    pointRadius: 4,
+                    pointHoverRadius: 6
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    x: {
+                        grid: { display: false },
+                        ticks: { maxTicksLimit: 6 }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        grid: { color: 'rgba(0, 206, 201, 0.1)' },
+                        ticks: { callback: v => v + 'MB' }
+                    }
+                },
+                interaction: { intersect: false, mode: 'index' }
+            }
+        });
+
+        // Stats Chart (Doughnut)
+        const statsCtx = document.getElementById('statsChart').getContext('2d');
+        const statsChart = new Chart(statsCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Servers', 'Users (÷100)', 'Channels'],
+                datasets: [{
+                    data: [<%= status.servers %>, <%= Math.round(status.users / 100) %>, <%= status.channels %>],
+                    backgroundColor: [
+                        'rgba(108, 92, 231, 0.8)',
+                        'rgba(0, 206, 201, 0.8)',
+                        'rgba(253, 121, 168, 0.8)'
+                    ],
+                    borderColor: [
+                        '#6c5ce7',
+                        '#00cec9',
+                        '#fd79a8'
+                    ],
+                    borderWidth: 2,
+                    hoverOffset: 10
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            padding: 20,
+                            usePointStyle: true,
+                            pointStyle: 'circle'
+                        }
+                    }
+                },
+                cutout: '65%'
+            }
+        });
+
+        // Update charts with new data
+        async function updateStats() {
+            try {
+                const res = await fetch('/api/stats');
+                const data = await res.json();
+                
+                // Update display values
+                document.getElementById('ping').textContent = data.ping + 'ms';
+                document.getElementById('servers').textContent = data.servers.toLocaleString();
+                document.getElementById('users').textContent = data.users.toLocaleString();
+                
+                // Add new data point
+                const time = new Date().toLocaleTimeString();
+                
+                // Update ping chart
+                if (pingData.length >= maxDataPoints) {
+                    pingData.shift();
+                    timeLabels.shift();
+                }
+                pingData.push(data.ping);
+                timeLabels.push(time);
+                pingChart.update('none');
+                
+                // Update memory chart
+                if (memoryData.length >= maxDataPoints) {
+                    memoryData.shift();
+                }
+                memoryData.push(data.memory || <%= status.memoryUsage %>);
+                memoryChart.update('none');
+                
+                // Update stats chart
+                statsChart.data.datasets[0].data = [data.servers, Math.round(data.users / 100), data.channels || <%= status.channels %>];
+                statsChart.update('none');
+                
+            } catch (e) {
+                console.log('Failed to fetch stats');
+            }
+        }
+
+        // Update every 5 seconds
+        setInterval(updateStats, 5000);
+    </script>
+</body>
+</html>

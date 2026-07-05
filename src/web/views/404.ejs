@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include('partials/head') %>
+</head>
+<body class="error-page">
+    <%- include('partials/navbar') %>
+
+    <!-- 404 Section -->
+    <section class="error-section">
+        <div class="container">
+            <div class="error-content">
+                <!-- Animated 404 -->
+                <div class="error-visual">
+                    <div class="error-number">
+                        <span class="digit">4</span>
+                        <span class="digit middle">
+                            <div class="vinyl">
+                                <div class="vinyl-inner"></div>
+                                <div class="vinyl-label">
+                                    <i class="fas fa-music"></i>
+                                </div>
+                            </div>
+                        </span>
+                        <span class="digit">4</span>
+                    </div>
+                    <div class="error-waves">
+                        <span></span><span></span><span></span>
+                    </div>
+                </div>
+
+                <!-- Error Message -->
+                <div class="error-message">
+                    <h1>Oops! Page Not Found</h1>
+                    <p>Looks like this track got lost in the playlist. The page you're looking for doesn't exist or has been moved.</p>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="error-actions">
+                    <a href="/" class="btn btn-primary">
+                        <i class="fas fa-home"></i> Back to Home
+                    </a>
+                    <a href="/docs" class="btn btn-secondary">
+                        <i class="fas fa-book"></i> View Docs
+                    </a>
+                </div>
+
+                <!-- Quick Links -->
+                <div class="quick-links">
+                    <span>Or try these:</span>
+                    <div class="links">
+                        <a href="/commands">Commands</a>
+                        <a href="/status">Status</a>
+                        <a href="/report">Report Issue</a>
+                        <a href="<%= bot.supportServer %>" target="_blank">Support</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Background Elements -->
+        <div class="error-bg">
+            <div class="floating-notes">
+                <span class="note">♪</span>
+                <span class="note">♫</span>
+                <span class="note">♬</span>
+                <span class="note">♩</span>
+                <span class="note">♪</span>
+                <span class="note">♫</span>
+            </div>
+        </div>
+    </section>
+
+    <%- include('partials/footer') %>
+</body>
+</html>

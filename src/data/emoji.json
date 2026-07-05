@@ -1,0 +1,73 @@
+{
+  "karaoke": {
+    "microphone": "<:mic:1457196702397108347>",
+    "music": "<:ll_cinna_music:1457196952151130357>",
+    "speaker": "🔊",
+    "tv": "📺",
+    "star": "⭐",
+    "party": "🎉",
+    "book": "📖",
+    "queue": "📋",
+    "position": "📍",
+    "timer": "⏱️",
+    "next": "⏭️",
+    "mute": "🔇",
+    "unmute": "🔊",
+    "crown": "👑",
+    "singing": "🎙️"
+  },
+  "status": {
+    "success": "<:check:1457196078360170558>",
+    "error": "<:xmark:1457196212158464234>",
+    "warning": "<:warn:1457197578826289348>",
+    "info": "<:info:1457197697248526515>",
+    "loading": "<a:Loading:1457197828014084289>"
+  },
+  "navigation": {
+    "prev": "◀",
+    "next": "▶",
+    "refresh": "🔄",
+    "search": "🔍",
+    "online": "🌐",
+    "page": "📄"
+  },
+  "actions": {
+    "join": "🎤",
+    "leave": "❌",
+    "start": "▶️",
+    "stop": "⏹️",
+    "skip": "⏭️",
+    "setup": "🚀",
+    "confirm": "✅",
+    "reset": "🔄"
+  },
+  "ratings": {
+    "star1": "⭐",
+    "star2": "⭐⭐",
+    "star3": "⭐⭐⭐",
+    "star4": "⭐⭐⭐⭐",
+    "star5": "⭐⭐⭐⭐⭐"
+  },
+  "categories": {
+    "info": "📖",
+    "karaoke": "🎤",
+    "config": "⚙️",
+    "dev": "🛠️",
+    "moderation": "🛡️",
+    "fun": "🎮",
+    "music": "🎵",
+    "utility": "🔧",
+    "other": "📦"
+  },
+  "misc": {
+    "divider": "───────────────────",
+    "id": "🆔",
+    "trophy": "🏆",
+    "medal": "🥇",
+    "chart": "📊",
+    "event": "🎫",
+    "command": "⌨️",
+    "ready": "✔️",
+    "start": "►"
+  }
+}

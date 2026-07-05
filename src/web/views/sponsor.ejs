@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include('partials/head') %>
+</head>
+<body>
+    <%- include('partials/preloader') %>
+    <%- include('partials/navbar') %>
+
+    <!-- Sponsor Hero -->
+    <section class="page-hero">
+        <div class="container">
+            <h1 class="page-title"><i class="fas fa-heart"></i> Our Sponsor</h1>
+            <p class="page-subtitle">Thank you for supporting Vocal Vibes!</p>
+        </div>
+    </section>
+
+    <!-- Sponsor Content -->
+    <section class="sponsor-section">
+        <div class="container">
+            <% if (sponsor) { %>
+            <div class="sponsor-card-large">
+                <div class="sponsor-avatar-wrapper">
+                    <div class="sponsor-ring"></div>
+                    <div class="sponsor-ring ring-2"></div>
+                    <img src="<%= sponsor.avatar %>" alt="<%= sponsor.username %>" class="sponsor-avatar">
+                </div>
+                <div class="sponsor-info">
+                    <h2 class="sponsor-name"><%= sponsor.username %></h2>
+                    <p class="sponsor-id">ID: <%= sponsor.id %></p>
+                    <div class="sponsor-badge">
+                        <i class="fas fa-crown"></i> Official Sponsor
+                    </div>
+                </div>
+                <div class="sponsor-message">
+                    <div class="message-icon"><i class="fas fa-quote-left"></i></div>
+                    <p>Your generous support helps keep Vocal Vibes running and brings joy to karaoke lovers everywhere! Thank you for believing in our community and making karaoke nights possible!</p>
+                </div>
+                <div class="sponsor-stats">
+                    <div class="sponsor-stat">
+                        <i class="fas fa-calendar"></i>
+                        <span>Member since <%= new Date(sponsor.createdAt).getFullYear() %></span>
+                    </div>
+                    <div class="sponsor-stat">
+                        <i class="fas fa-star"></i>
+                        <span>Premium Supporter</span>
+                    </div>
+                </div>
+            </div>
+            <% } else { %>
+            <div class="no-sponsor">
+                <i class="fas fa-user-slash"></i>
+                <p>Sponsor information unavailable</p>
+            </div>
+            <% } %>
+
+            <!-- Become a Sponsor -->
+            <div class="become-sponsor">
+                <h3>Want to Become a Sponsor?</h3>
+                <p>Support Vocal Vibes and get featured on our website!</p>
+                <a href="<%= bot.supportServer %>" class="btn btn-primary" target="_blank">
+                    <i class="fab fa-discord"></i> Contact Us
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <%- include('partials/footer') %>
+</body>
+</html>

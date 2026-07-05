@@ -1,0 +1,223 @@
+<!-- Chatbot Widget -->
+<div class="chatbot-widget" id="chatbot">
+    <button class="chatbot-toggle" id="chatbotToggle">
+        <i class="fas fa-comments"></i>
+        <span class="chatbot-badge" id="chatbotBadge">1</span>
+    </button>
+    
+    <div class="chatbot-window" id="chatbotWindow">
+        <div class="chatbot-header">
+            <div class="chatbot-header-info">
+                <img src="<%= bot.avatar %>" alt="Vocal Vibes" class="chatbot-avatar">
+                <div>
+                    <span class="chatbot-name">Vocal Vibes Assistant</span>
+                    <span class="chatbot-status"><i class="fas fa-circle"></i> Online</span>
+                </div>
+            </div>
+            <button class="chatbot-close" id="chatbotClose">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        
+        <div class="chatbot-messages" id="chatbotMessages">
+            <div class="chat-message bot">
+                <div class="message-avatar">
+                    <img src="<%= bot.avatar %>" alt="Bot">
+                </div>
+                <div class="message-content">
+                    <p>Hey there! 👋 I'm the Vocal Vibes Assistant. How can I help you today?</p>
+                    <span class="message-time">Just now</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="chatbot-suggestions" id="chatbotSuggestions">
+            <button class="suggestion-btn" data-message="How do I start a karaoke session?">Start karaoke</button>
+            <button class="suggestion-btn" data-message="What commands are available?">Commands</button>
+            <button class="suggestion-btn" data-message="How does the queue work?">Queue system</button>
+        </div>
+        
+        <form class="chatbot-input" id="chatbotForm">
+            <input type="text" id="chatbotInput" placeholder="Type your message..." autocomplete="off">
+            <button type="submit" id="chatbotSend">
+                <i class="fas fa-paper-plane"></i>
+            </button>
+        </form>
+    </div>
+</div>
+
+<script>
+(function() {
+    const toggle = document.getElementById('chatbotToggle');
+    const window = document.getElementById('chatbotWindow');
+    const close = document.getElementById('chatbotClose');
+    const form = document.getElementById('chatbotForm');
+    const input = document.getElementById('chatbotInput');
+    const messages = document.getElementById('chatbotMessages');
+    const suggestions = document.getElementById('chatbotSuggestions');
+    const badge = document.getElementById('chatbotBadge');
+    
+    let isOpen = false;
+    let sessionId = localStorage.getItem('chatSessionId') || null;
+    let remainingMessages = 20;
+    
+    // Toggle chatbot
+    toggle.addEventListener('click', () => {
+        isOpen = !isOpen;
+        window.classList.toggle('open', isOpen);
+        toggle.classList.toggle('active', isOpen);
+        badge.style.display = 'none';
+        if (isOpen) input.focus();
+    });
+    
+    close.addEventListener('click', () => {
+        isOpen = false;
+        window.classList.remove('open');
+        toggle.classList.remove('active');
+    });
+    
+    // Suggestion buttons
+    suggestions.addEventListener('click', (e) => {
+        if (e.target.classList.contains('suggestion-btn')) {
+            const message = e.target.dataset.message;
+            sendMessage(message);
+            suggestions.style.display = 'none';
+        }
+    });
+    
+    // Send message
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const message = input.value.trim();
+        if (message) {
+            sendMessage(message);
+            input.value = '';
+            suggestions.style.display = 'none';
+        }
+    });
+    
+    async function sendMessage(text) {
+        // Add user message
+        addMessage(text, 'user');
+        
+        // Show typing indicator
+        const typingId = showTyping();
+        
+        try {
+            const res = await fetch('/api/chat', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message: text })
+            });
+            
+            const data = await res.json();
+            removeTyping(typingId);
+            
+            if (data.error) {
+                addMessage('Sorry, I encountered an error. Please try again later.', 'bot');
+            } else {
+                addMessage(data.response, 'bot');
+            }
+        } catch (error) {
+            removeTyping(typingId);
+            addMessage('Sorry, I couldn\'t connect. Please check your connection.', 'bot');
+        }
+    }
+    
+    function parseMarkdown(text) {
+        // Escape HTML first
+        text = text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        
+        // Bold: **text** or __text__
+        text = text.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+        text = text.replace(/__(.+?)__/g, '<strong>$1</strong>');
+        
+        // Italic: *text* or _text_
+        text = text.replace(/\*(.+?)\*/g, '<em>$1</em>');
+        text = text.replace(/_(.+?)_/g, '<em>$1</em>');
+        
+        // Code: `code`
+        text = text.replace(/`(.+?)`/g, '<code>$1</code>');
+        
+        // Line breaks: double newline = paragraph
+        const paragraphs = text.split('\n\n');
+        text = paragraphs.map(p => {
+            // Check if it's a list
+            if (p.match(/^[\*\-\•]\s/m)) {
+                const items = p.split('\n').filter(line => line.trim());
+                const listItems = items.map(item => {
+                    const cleaned = item.replace(/^[\*\-\•]\s/, '');
+                    return `<li>${cleaned}</li>`;
+                }).join('');
+                return `<ul>${listItems}</ul>`;
+            }
+            // Check if it's a numbered list
+            else if (p.match(/^\d+\.\s/m)) {
+                const items = p.split('\n').filter(line => line.trim());
+                const listItems = items.map(item => {
+                    const cleaned = item.replace(/^\d+\.\s/, '');
+                    return `<li>${cleaned}</li>`;
+                }).join('');
+                return `<ol>${listItems}</ol>`;
+            }
+            // Regular paragraph
+            else {
+                return `<p>${p.replace(/\n/g, '<br>')}</p>`;
+            }
+        }).join('');
+        
+        return text;
+    }
+    
+    function addMessage(text, type) {
+        const avatar = type === 'bot' ? '<%= bot.avatar %>' : '';
+        const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        
+        const div = document.createElement('div');
+        div.className = `chat-message ${type}`;
+        
+        // Parse markdown for bot messages
+        const content = type === 'bot' ? parseMarkdown(text) : escapeHtml(text);
+        
+        div.innerHTML = `
+            ${type === 'bot' ? `<div class="message-avatar"><img src="${avatar}" alt="Bot"></div>` : ''}
+            <div class="message-content">
+                <div class="message-text">${content}</div>
+                <span class="message-time">${time}</span>
+            </div>
+        `;
+        
+        messages.appendChild(div);
+        messages.scrollTop = messages.scrollHeight;
+    }
+    
+    function showTyping() {
+        const id = 'typing-' + Date.now();
+        const div = document.createElement('div');
+        div.className = 'chat-message bot typing';
+        div.id = id;
+        div.innerHTML = `
+            <div class="message-avatar"><img src="<%= bot.avatar %>" alt="Bot"></div>
+            <div class="message-content">
+                <div class="typing-indicator">
+                    <span></span><span></span><span></span>
+                </div>
+            </div>
+        `;
+        messages.appendChild(div);
+        messages.scrollTop = messages.scrollHeight;
+        return id;
+    }
+    
+    function removeTyping(id) {
+        const el = document.getElementById(id);
+        if (el) el.remove();
+    }
+    
+    function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+})();
+</script>
