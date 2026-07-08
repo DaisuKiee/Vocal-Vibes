@@ -30,6 +30,7 @@ Thumbs.db
 # Documentation & Notes (MD files)
 *.md
 !README.md
+!PRIVACY_POLICY.md
 
 # Archive Files
 *.zip
